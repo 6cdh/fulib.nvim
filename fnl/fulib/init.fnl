@@ -68,6 +68,8 @@
     _ (= v1 v2)))
 
 (fn M.copy [tbl]
+  "table -> table
+  O(n). Return a copy of `tbl`."
   (M.map M.id tbl))
 
 ;; Lisp primitives
