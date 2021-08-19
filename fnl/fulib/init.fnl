@@ -43,7 +43,7 @@
   "any -> bool
   O(1). Return true if `v` is a list, false otherwise. A table `t` is a list if it is empty
   or `t[1] != nil`."
-  (or (M.empty? v) (not (M.nil? (?. v 1)))))
+  (and (M.tbl? v) (or (M.empty? v) (not (M.nil? (?. v 1))))))
 
 (fn flt_eq? [flt1 flt2]
   (-> (- flt1 flt2) (math.abs) (< 1e-06)))
