@@ -16,4 +16,13 @@ WIP
 
 # Test
 
-WIP
+Executing tests requires
+
+-   [Fennel](https://github.com/bakpakin/Fennel) in your PATH.
+
+Clone this repo and run
+
+``` shell
+cd fulib.nvim/test
+fennel tests.fnl
+```
