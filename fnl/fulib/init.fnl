@@ -221,10 +221,25 @@
 
 ;; intersect 
 
+(fn to-exist-map [lst]
+  (let [ntbl {}]
+    (for_each_in_lst #(tset ntbl $1 true) lst)
+    ntbl))
+
+(fn intersect-lst [tbl1 tbl2]
+  (local in-tbl1 (to-exist-map tbl1))
+  (M.filter #(. in-tbl1 $1) tbl2))
+
+(fn intersect-tbl [tbl1 tbl2]
+  (if (M.list? tbl1) (M.filter #(-> (. tbl1 $2) (M.nil?) (not)) tbl2)
+      (M.filter #(-> (. tbl2 $2) (M.nil?) (not)) tbl1)))
+
 (fn M.intersect [tbl1 tbl2]
   "table -> table -> list
   O(n). Return the intersection of `tbl1` and `tbl2`."
-  (M.tbl-values (M.map #(if (not (M.nil? (. tbl2 $2))) $2) tbl1)))
+  (if (and (M.list? tbl1) (M.list? tbl2))
+      (intersect-lst tbl1 tbl2)
+      (intersect-tbl tbl1 tbl2)))
 
 ;; zip
 
