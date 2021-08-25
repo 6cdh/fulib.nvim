@@ -243,18 +243,22 @@
 
 ;; zip
 
-(fn M.zip_with [f lst1 lst2]
-  "(v1 -> v2 -> any) -> {k1 v1} -> {k2 v2} -> list
-  O(min(m, n)). Return a list corresponding pair of `tbl1` and `tbl2`."
+(fn range [start end]
   (let [nlst []]
-    (for_each_in_lst #(M.append nlst (f (. lst1 $1) (. lst2 $1)))
-                     (M.intersect lst1 lst2))
+    (for [i start end]
+      (M.append nlst i))
     nlst))
 
-(fn M.zip [tbl1 tbl2]
+(fn M.zip_with [f lst1 lst2]
+  "(v1 -> v2 -> any) -> list -> list -> list
+  O(min(m, n)). Return a list corresponding pair of `lst1` and `lst2`."
+  (let [len (math.min (length lst1) (length lst2))]
+    (M.map #(f (. lst1 $1) (. lst2 $1)) (range 1 len))))
+
+(fn M.zip [lst1 lst2]
   "table -> table -> list
-  O(min(m, n)). Return a list of corresponding pair of `tbl1` and `tbl2`."
-  (M.zip_with #[$1 $2] tbl1 tbl2))
+  O(min(m, n)). Return a list of corresponding pair of `lst1` and `lst2`."
+  (M.zip_with #[$1 $2] lst1 lst2))
 
 ;; neg functions register
 
