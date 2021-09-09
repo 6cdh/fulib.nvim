@@ -7,33 +7,39 @@ on:
 env:
   fennel-version: 0.10.0
   lua-version: luajit-2.1.0-beta3
-  binary-path: ${GITHUB_WORKSPACE}/.bin
+  binary-path: ${{ github.workspace }}/.bin
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Prepare Lua
         uses: leafo/gh-actions-lua@master # Avoid compile
         with:
           luaVersion: ${{ env.lua-version }}
+
+      - name: Add PATH and move lua binary to PATH
+        run: |
+          mkdir -p ${{ env.binary-path }}
+          cp .lua/bin/* ${{ env.binary-path }}
+          echo "${{ env.binary-path }}" >> $GITHUB_PATH
 
       - name: Prepare Fennel
         run: |
           git clone https://github.com/bakpakin/Fennel.git
           cd Fennel && git checkout ${{ env.fennel-version }}
           make fennel
+          mkdir -p ${{ env.binary-path }}
           cp fennel ${{ env.binary-path }}
+          ls ${{ env.binary-path }}
 
       - name: Cache Lua and Fennel
         uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-dep-${{ env.fennel-version }}-${{ env.lua-version }}
+          key: ${{ runner.os }}-dependencies-${{ env.fennel-version }}-${{ env.lua-version }}
           path: ${{ env.binary-path }}
-
-      - name: Update PATH
-        run: echo ${{ env.binary-path }} >> $GITHUB_PATH
 
       - name: Run test
         run: |
@@ -49,8 +55,13 @@ jobs:
       - name: Restore fennel cache
         uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-dep-${{ env.fennel-version }}-${{ env.lua-version }}
+          key: ${{ runner.os }}-dependencies-${{ env.fennel-version }}-${{ env.lua-version }}
           path: ${{ env.binary-path }}
+
+      - name: Update PATH
+        run: |
+          echo "${{ env.binary-path }}" >> $GITHUB_PATH
+          ls ${{ env.binary-path }}
 
       - name: Update Lua source
         run: |
@@ -62,4 +73,5 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "[lua-gen] Update lua source"
+          commit_author: Author <actions@github.com>
           file_pattern: lua
