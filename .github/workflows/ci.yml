@@ -76,5 +76,5 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "[Bot] Update lua source and docs"
-          commit_author: Author <actions@github.com>
+          commit_author: Github Action <actions@github.com>
           file_pattern: lua docs.md
