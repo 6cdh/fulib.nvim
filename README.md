@@ -2,19 +2,40 @@
 
 A functional library written in Fennel, also a nvim plugin.
 
-# Install
+## Status
 
-Install with packer.nvim or any other plugin manger you like
+Beta. Breaking changes may occur.
+
+## Install
+
+Install with [packer.nvim](https://github.com/wbthomason/packer.nvim):
 
 ``` lua
 use '6cdh/fulib.nvim'
 ```
 
-# Document
+or any other plugin manger you like.
 
-WIP
+Or add the following lua code into the head of your init file if you use this plugin in
+your nvim config file.
 
-# Test
+``` lua
+local fulib_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/fulib.nvim'
+if vim.fn.empty(vim.fn.glob(fulib_path)) > 0 then
+    vim.api.nvim_command(
+        string.format(
+            '!git clone https://github.com/6cdh/fulib.nvim --depth 1 %s',
+            fulib_path
+        )
+    )
+end
+```
+
+## Document
+
+See [docs.md](docs.md)
+
+## Test
 
 Executing tests requires
 
