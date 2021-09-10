@@ -1,46 +1,59 @@
+;; @title(Fulib.nvim)
+
+;; @abstract(A Functional library in Fennel for nvim)
+;; @generated_by
+
+;; @export
 (local M {})
 
 (macro dispatch [cond f1 f2]
   `(if ,cond ,f1 ,f2))
 
-;; numeric
+;; @section(number)
 
 (fn M.inc [num]
   "number | string -> number
+
   O(1). Increase `num`. `num` may be a number or string that can be converted to a number."
   (+ num 1))
 
 (fn M.dec [num]
   "number | string -> number
+
   O(1). Decrease `num`. `num` may be a number or string that can be converted to a number."
   (- num 1))
 
 (fn M.odd? [num]
   "number | string -> bool
+
   O(1). Return true if `num` is odd, false otherwise. If `num` is a string, it must be
   convertible to a number."
   (= (% num 2) 1))
 
 (fn M.even? [num]
   "number | string -> bool
+
   O(1). Return true if `num` is even, false otherwise. If `num` is a string, it must be
   convertible to a number."
   (not (M.odd? num)))
 
-;; type
+;; @section(type)
 
 (fn M.nil? [v]
   "any -> bool
+
   O(1). Return true if `v` is nil, false otherwise."
   (= v nil))
 
 (fn M.tbl? [v]
   "any -> bool
+
   O(1). Return true if `v` is a table, false otherwise."
   (= (type v) :table))
 
 (fn M.list? [v]
   "any -> bool
+
   O(1). Return true if `v` is a list, false otherwise. A table `t` is a list if it is empty
   or `t[1] != nil`."
   (and (M.tbl? v) (or (M.empty? v) (not (M.nil? (?. v 1))))))
@@ -58,6 +71,7 @@
 
 (fn M.eq? [v1 v2]
   "any -> any -> bool
+
   O(1) if `v1` and `v2` are not both table. Basically the same as `v1 == v2` in Lua except
   * for table, it will perform `eq?` for each key
   and corresponding value.
@@ -67,37 +81,42 @@
     [:table :table] (tbl_eq? v1 v2)
     _ (= v1 v2)))
 
-(fn M.copy [tbl]
-  "table -> table
-  O(n). Return a copy of `tbl`."
-  (M.map M.id tbl))
-
-;; Lisp primitives
+;; @section(Lisp primitives)
 
 (fn M.cons [elem lst]
   "any -> list -> list
+
   O(n). Insert `elem` in front of `lst`. A new list would be created and returned."
   (let [nlst (M.copy lst)]
     (table.insert nlst 1 elem)
     nlst))
 
 (fn M.car [lst]
-  "list -> any"
-  "O(1). Return the first element of `lst`."
+  "list -> any
+
+  O(1). Return the first element of `lst`."
   (. lst 1))
 
 (fn M.cdr [lst]
   "list -> list
+
   O(n). Remove the first element of `lst` and return `lst`. A new table would be created
   and returned."
   (let [nlst (M.copy lst)]
     (table.remove nlst 1)
     nlst))
 
-;; List
+;; @section(Table/List)
+
+(fn M.copy [tbl]
+  "table -> table
+
+  O(n). Return a copy of `tbl`."
+  (M.map M.id tbl))
 
 (fn M.empty? [v]
   "table | string -> bool
+
   O(1). Return true if `v` is an empty string or empty table, false otherwise."
   (match [(type v)]
     [:string] (= v "")
@@ -106,11 +125,13 @@
 
 (fn M.member? [elem tbl]
   "any -> table -> bool
+
   O(n). Return true if `elem` is one of the values of `tbl`."
   (M.any #(M.eq? elem $1) tbl))
 
 (fn M.tbl-keys [tbl]
   "table -> list
+
   O(n). Return the list of keys of `tbl`."
   (let [ntbl []]
     (M.for_each #(M.append ntbl $2) tbl)
@@ -118,15 +139,24 @@
 
 (fn M.tbl-values [tbl]
   "table -> list
+
   O(n). Return the list of values of `tbl`."
   (let [ntbl []]
     (M.for_each #(M.append ntbl $1) tbl)
     ntbl))
 
-;; functional
+(fn M.append [tbl v]
+  "table -> any -> table
+
+  O(1). Append `v` into `tbl`."
+  (tset tbl (+ (length tbl) 1) v)
+  tbl)
+
+;; @section(Common functional utils)
 
 (fn M.id [v]
   "any -> any
+
   O(1). Identity function."
   v)
 
@@ -144,6 +174,7 @@
 
 (fn M.all [pred tbl]
   "(v -> k -> bool) | (v -> bool) -> {k v}
+
   O(n * pred). Return true if predicate `pred` return true for all elements of `tbl`,
   false otherwise."
   ((dispatch (M.list? tbl) all_lst all_tbl) pred tbl))
@@ -152,17 +183,10 @@
 
 (fn M.any [pred tbl]
   "(v -> k -> bool) | (v -> bool) -> {k v}
+
   O(n * pred). Return true if predicate `pred` return true for at least elements of `tbl`,
   false otherwise."
   (not (M.all #(not (pred $...)) tbl)))
-
-;; append
-
-(fn M.append [tbl v]
-  "table -> any -> table
-  O(1). Append `v` into `tbl`."
-  (tset tbl (+ (length tbl) 1) v)
-  tbl)
 
 ;; map
 
@@ -176,12 +200,14 @@
 
 (fn M.for_each [f tbl]
   "(v -> k -> any) | (v -> any) -> table | list -> table | list
+
   O(n * f). Apply function `f` for all elements of `tbl` without change `tbl` or create a new
   list."
   ((dispatch (M.list? tbl) for_each_in_lst for_each_in_tbl) f tbl))
 
 (fn M.map [f tbl]
   "(v -> k -> any) | (v -> any) -> table -> table
+
   O(n * f). Like `for_each` but a new table would be created."
   (let [ntbl {}]
     (if (M.list? tbl) (M.for_each #(M.append ntbl (f $1 $2)) tbl)
@@ -192,6 +218,7 @@
 
 (fn M.filter [pred tbl]
   "(v -> k -> bool) | (v -> bool) -> table -> table
+
   O(n * pred). Return a new list with the elements of `tbl` for which `pred` returns true."
   (M.map #(when (pred $1 $2)
             $1) tbl))
@@ -200,6 +227,7 @@
 
 (fn M.foldl [f init lst]
   "(init -> v -> k -> init) | (init -> v -> init) -> init -> table -> init
+
   O(n * f). Start with `init`, reduce `lst` with function `f`, from left to right."
   (var acc init)
   (M.for_each #(set acc (f acc $1 $2)) lst)
@@ -207,6 +235,7 @@
 
 (fn M.foldr [f init lst]
   "(v -> init -> k -> init) | (v -> init -> init) -> init -> table -> init
+
   O(n * f). Start with `init`, reduce `lst` with function `f`, from right to left."
   (var acc init)
   (M.for_each #(set acc (f $1 acc $2)) (M.reverse lst))
@@ -216,6 +245,7 @@
 
 (fn M.reverse [lst]
   "list -> list
+
   O(n). Reverse `lst`."
   (M.map #(. lst (- (+ (length lst) 1) $2)) lst))
 
@@ -236,6 +266,7 @@
 
 (fn M.intersect [tbl1 tbl2]
   "table -> table -> list
+
   O(n). Return the intersection of `tbl1` and `tbl2`."
   (if (and (M.list? tbl1) (M.list? tbl2))
       (intersect-lst tbl1 tbl2)
@@ -251,12 +282,14 @@
 
 (fn M.zip_with [f lst1 lst2]
   "(v1 -> v2 -> any) -> list -> list -> list
+
   O(min(m, n)). Return a list corresponding pair of `lst1` and `lst2`."
   (let [len (math.min (length lst1) (length lst2))]
     (M.map #(f (. lst1 $1) (. lst2 $1)) (range 1 len))))
 
 (fn M.zip [lst1 lst2]
   "table -> table -> list
+
   O(min(m, n)). Return a list of corresponding pair of `lst1` and `lst2`."
   (M.zip_with #[$1 $2] lst1 lst2))
 

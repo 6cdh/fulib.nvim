@@ -33,7 +33,6 @@ jobs:
           make fennel
           mkdir -p ${{ env.binary-path }}
           cp fennel ${{ env.binary-path }}
-          ls ${{ env.binary-path }}
 
       - name: Cache Lua and Fennel
         uses: actions/cache@v2
@@ -46,7 +45,7 @@ jobs:
           cd test
           fennel tests.fnl
 
-  lua-gen:
+  lua-docs:
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -61,7 +60,6 @@ jobs:
       - name: Update PATH
         run: |
           echo "${{ env.binary-path }}" >> $GITHUB_PATH
-          ls ${{ env.binary-path }}
 
       - name: Update Lua source
         run: |
@@ -69,9 +67,14 @@ jobs:
           mkdir -p lua/fulib
           fennel -c fnl/fulib/init.fnl > lua/fulib/init.lua
 
+      - name: Update docs
+        run: |
+          sudo apt install -y pandoc
+          cat fnl/fulib/init.fnl | fennel scripts/doc.fnl | pandoc -t markdown > docs.md
+
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "[lua-gen] Update lua source"
+          commit_message: "[Bot] Update lua source and docs"
           commit_author: Author <actions@github.com>
-          file_pattern: lua
+          file_pattern: lua docs.md
