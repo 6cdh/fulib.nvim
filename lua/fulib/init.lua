@@ -50,9 +50,6 @@ M["eq?"] = function(v1, v2)
     return (v1 == v2)
   end
 end
-M.copy = function(tbl)
-  return M.map(M.id, tbl)
-end
 M.cons = function(elem, lst)
   local nlst = M.copy(lst)
   table.insert(nlst, 1, elem)
@@ -65,6 +62,9 @@ M.cdr = function(lst)
   local nlst = M.copy(lst)
   table.remove(nlst, 1)
   return nlst
+end
+M.copy = function(tbl)
+  return M.map(M.id, tbl)
 end
 M["empty?"] = function(v)
   local _7_ = {type(v)}
@@ -99,6 +99,10 @@ M["tbl-values"] = function(tbl)
   M.for_each(_11_, tbl)
   return ntbl
 end
+M.append = function(tbl, v)
+  tbl[(#tbl + 1)] = v
+  return tbl
+end
 M.id = function(v)
   return v
 end
@@ -132,10 +136,6 @@ M.any = function(pred, tbl)
     return not pred(...)
   end
   return not M.all(_16_, tbl)
-end
-M.append = function(tbl, v)
-  tbl[(#tbl + 1)] = v
-  return tbl
 end
 local function for_each_in_lst(f, lst)
   for i = 1, #lst do
