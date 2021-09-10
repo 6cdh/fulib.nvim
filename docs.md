@@ -57,6 +57,15 @@ any -> bool
 
 O(1). Return true if `v` is nil, false otherwise.
 
+#### not-nil?
+
+``` fennel
+(not-nil? v)
+any -> bool
+```
+
+O(1). Return false if `v` is nil, true otherwise.
+
 #### tbl?
 
 ``` fennel
@@ -66,6 +75,15 @@ any -> bool
 
 O(1). Return true if `v` is a table, false otherwise.
 
+#### not-tbl?
+
+``` fennel
+(not-tbl? v)
+any -> bool
+```
+
+O(1). Return false if `v` is a table, true otherwise.
+
 #### list?
 
 ``` fennel
@@ -74,6 +92,16 @@ any -> bool
 ```
 
 O(1). Return true if `v` is a list, false otherwise. A table `t` is a
+list if it is empty or `t[1] != nil`.
+
+#### not-list?
+
+``` fennel
+(not-list? v)
+any -> bool
+```
+
+O(1). Return false if `v` is a list, true otherwise. A table `t` is a
 list if it is empty or `t[1] != nil`.
 
 #### eq?
@@ -86,6 +114,18 @@ any -> any -> bool
 O(1) if `v1` and `v2` are not both table. Basically the same as `v1 ==
 v2` in Lua except \* for table, it will perform `eq?` for each key and
 corresponding value. \* for number, it will perform float equality
+comparisons.
+
+#### not-eq?
+
+``` fennel
+(not-eq? v1 v2)
+any -> any -> bool
+```
+
+O(1) if `v1` and `v2` are not both table. Basically the same as `v1 ~=
+v2` in Lua except \* for table, it will perform `not-eq?` for each key
+and corresponding value. \* for number, it will perform float equality
 comparisons.
 
 ## Lisp primitives
@@ -140,6 +180,16 @@ table | string -> bool
 O(1). Return true if `v` is an empty string or empty table, false
 otherwise.
 
+#### not-empty?
+
+``` fennel
+(not-empty? v)
+table | string -> bool
+```
+
+O(1). Return false if `v` is an empty string or empty table, true
+otherwise.
+
 #### member?
 
 ``` fennel
@@ -147,7 +197,18 @@ otherwise.
 any -> table -> bool
 ```
 
-O(n). Return true if `elem` is one of the values of `tbl`.
+O(n). Return true if `elem` is one of the values of `tbl`, false
+otherwise.
+
+#### not-member?
+
+``` fennel
+(not-member? elem tbl)
+any -> table -> bool
+```
+
+O(n). Return false if `elem` is one of the values of `tbl`, true
+otherwise.
 
 #### tbl-keys
 

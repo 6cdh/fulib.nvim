@@ -14,8 +14,14 @@ end
 M["nil?"] = function(v)
   return (v == nil)
 end
+M["not-nil?"] = function(v)
+  return (v ~= nil)
+end
 M["tbl?"] = function(v)
   return (type(v) == "table")
+end
+M["not-tbl?"] = function(v)
+  return not M["tbl?"](v)
 end
 M["list?"] = function(v)
   local function _2_()
@@ -26,6 +32,9 @@ M["list?"] = function(v)
     return t_1_
   end
   return (M["tbl?"](v) and (M["empty?"](v) or not M["nil?"](_2_())))
+end
+M["not-list?"] = function(v)
+  return not M["list?"](v)
 end
 local function flt_eq_3f(flt1, flt2)
   return (math.abs((flt1 - flt2)) < 1e-06)
@@ -49,6 +58,9 @@ M["eq?"] = function(v1, v2)
     local _ = _5_
     return (v1 == v2)
   end
+end
+M["not-eq?"] = function(v1, v2)
+  return not M["eq?"](v1, v2)
 end
 M.cons = function(elem, lst)
   local nlst = M.copy(lst)
@@ -77,11 +89,17 @@ M["empty?"] = function(v)
     return false
   end
 end
+M["not-empty?"] = function(v)
+  return not M["empty?"](v)
+end
 M["member?"] = function(elem, tbl)
   local function _9_(_241)
     return M["eq?"](elem, _241)
   end
   return M.any(_9_, tbl)
+end
+M["not-member?"] = function(elem, tbl)
+  return not M["member?"](elem, tbl)
 end
 M["tbl-keys"] = function(tbl)
   local ntbl = {}
@@ -262,18 +280,4 @@ M.zip = function(lst1, lst2)
   end
   return M.zip_with(_34_, lst1, lst2)
 end
-local function neg_register(fname)
-  local function _35_(...)
-    return not M[fname](...)
-  end
-  M[("!" .. fname)] = _35_
-  return nil
-end
-local function neg_registers(fnames)
-  local function _36_(_241)
-    return neg_register(_241)
-  end
-  return M.for_each(_36_, fnames)
-end
-neg_registers({"tbl?", "list?", "nil?", "flt_eq?", "tbl_eq?", "eq?", "empty?", "member?"})
 return M
