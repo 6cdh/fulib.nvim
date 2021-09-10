@@ -45,11 +45,23 @@
   O(1). Return true if `v` is nil, false otherwise."
   (= v nil))
 
+(fn M.not-nil? [v]
+  "any -> bool
+
+  O(1). Return false if `v` is nil, true otherwise."
+  (not= v nil))
+
 (fn M.tbl? [v]
   "any -> bool
 
   O(1). Return true if `v` is a table, false otherwise."
   (= (type v) :table))
+
+(fn M.not-tbl? [v]
+  "any -> bool
+
+  O(1). Return false if `v` is a table, true otherwise."
+  (not (M.tbl? v)))
 
 (fn M.list? [v]
   "any -> bool
@@ -57,6 +69,13 @@
   O(1). Return true if `v` is a list, false otherwise. A table `t` is a list if it is empty
   or `t[1] != nil`."
   (and (M.tbl? v) (or (M.empty? v) (not (M.nil? (?. v 1))))))
+
+(fn M.not-list? [v]
+  "any -> bool
+
+  O(1). Return false if `v` is a list, true otherwise. A table `t` is a list if it is empty
+  or `t[1] != nil`."
+  (not (M.list? v)))
 
 (fn flt_eq? [flt1 flt2]
   (-> (- flt1 flt2) (math.abs) (< 1e-06)))
@@ -73,13 +92,20 @@
   "any -> any -> bool
 
   O(1) if `v1` and `v2` are not both table. Basically the same as `v1 == v2` in Lua except
-  * for table, it will perform `eq?` for each key
-  and corresponding value.
+  * for table, it will perform `eq?` for each key and corresponding value.
   * for number, it will perform float equality comparisons."
   (match [(type v1) (type v2)]
     [:number :number] (flt_eq? v1 v2)
     [:table :table] (tbl_eq? v1 v2)
     _ (= v1 v2)))
+
+(fn M.not-eq? [v1 v2]
+  "any -> any -> bool
+
+  O(1) if `v1` and `v2` are not both table. Basically the same as `v1 ~= v2` in Lua except
+  * for table, it will perform `not-eq?` for each key and corresponding value.
+  * for number, it will perform float equality comparisons."
+  (not (M.eq? v1 v2)))
 
 ;; @section(Lisp primitives)
 
@@ -123,11 +149,23 @@
     [:table] (M.nil? (next v))
     _ false))
 
+(fn M.not-empty? [v]
+  "table | string -> bool
+
+  O(1). Return false if `v` is an empty string or empty table, true otherwise."
+  (not (M.empty? v)))
+
 (fn M.member? [elem tbl]
   "any -> table -> bool
 
-  O(n). Return true if `elem` is one of the values of `tbl`."
+  O(n). Return true if `elem` is one of the values of `tbl`, false otherwise."
   (M.any #(M.eq? elem $1) tbl))
+
+(fn M.not-member? [elem tbl]
+  "any -> table -> bool
+
+  O(n). Return false if `elem` is one of the values of `tbl`, true otherwise."
+  (not (M.member? elem tbl)))
 
 (fn M.tbl-keys [tbl]
   "table -> list
@@ -292,16 +330,6 @@
 
   O(min(m, n)). Return a list of corresponding pair of `lst1` and `lst2`."
   (M.zip_with #[$1 $2] lst1 lst2))
-
-;; neg functions register
-
-(fn neg-register [fname]
-  (tset M (.. "!" fname) #(not ((. M fname) $...))))
-
-(fn neg-registers [fnames]
-  (M.for_each #(neg-register $1) fnames))
-
-(neg-registers [:tbl? :list? :nil? :flt_eq? :tbl_eq? :eq? :empty? :member?])
 
 M
 
