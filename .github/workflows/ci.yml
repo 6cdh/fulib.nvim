@@ -71,7 +71,7 @@ jobs:
 
       - name: Update docs
         run: |
-          npm install prettier
+          npm install prettier -g
           cat fnl/fulib/init.fnl | fennel scripts/doc.fnl | prettier --parser markdown > docs.md
 
       - name: Commit Changes
