@@ -86,19 +86,19 @@ any -> bool
 
 O(1). Return false if `v` is nil, true otherwise.
 
-#### tbl?
+#### table?
 
 ```fennel
-(tbl? v)
+(table? v)
 any -> bool
 ```
 
 O(1). Return true if `v` is a table, false otherwise.
 
-#### not-tbl?
+#### not-table?
 
 ```fennel
-(not-tbl? v)
+(not-table? v)
 any -> bool
 ```
 
@@ -131,7 +131,8 @@ or `t[1] != nil`.
 any -> any -> bool
 ```
 
-O(1) if `v1` and `v2` are not both table. Basically the same as `v1 == v2` in Lua except
+O(1) if `v1` and `v2` are not both table, otherwise it compares `v1` and `v2`
+recursively. Basically the same as `v1 == v2` in Lua except
 
 - for table, it will perform `eq?` for each key and corresponding value.
 - for number, it will perform float equality comparisons.
@@ -225,19 +226,19 @@ any -> table -> bool
 
 O(n). Return false if `elem` is one of the values of `tbl`, true otherwise.
 
-#### tbl-keys
+#### table-keys
 
 ```fennel
-(tbl-keys tbl)
+(table-keys tbl)
 table -> list
 ```
 
 O(n). Return the list of keys of `tbl`.
 
-#### tbl-values
+#### table-values
 
 ```fennel
-(tbl-values tbl)
+(table-values tbl)
 table -> list
 ```
 
@@ -247,7 +248,7 @@ O(n). Return the list of values of `tbl`.
 
 ```fennel
 (append tbl v)
-table -> any -> table
+list -> any -> list
 ```
 
 O(1). Append `v` into `tbl`.

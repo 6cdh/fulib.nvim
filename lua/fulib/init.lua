@@ -17,11 +17,11 @@ end
 M["not-nil?"] = function(v)
   return (v ~= nil)
 end
-M["tbl?"] = function(v)
+M["table?"] = function(v)
   return (type(v) == "table")
 end
-M["not-tbl?"] = function(v)
-  return not M["tbl?"](v)
+M["not-table?"] = function(v)
+  return not M["table?"](v)
 end
 M["list?"] = function(v)
   local function _2_()
@@ -31,7 +31,7 @@ M["list?"] = function(v)
     end
     return t_1_
   end
-  return (M["tbl?"](v) and (M["empty?"](v) or not M["nil?"](_2_())))
+  return (M["table?"](v) and (M["empty?"](v) or not M["nil?"](_2_())))
 end
 M["not-list?"] = function(v)
   return not M["list?"](v)
@@ -101,7 +101,7 @@ end
 M["not-member?"] = function(elem, tbl)
   return not M["member?"](elem, tbl)
 end
-M["tbl-keys"] = function(tbl)
+M["table-keys"] = function(tbl)
   local ntbl = {}
   local function _10_(_241, _242)
     return M.append(ntbl, _242)
@@ -109,7 +109,7 @@ M["tbl-keys"] = function(tbl)
   M.for_each(_10_, tbl)
   return ntbl
 end
-M["tbl-values"] = function(tbl)
+M["table-values"] = function(tbl)
   local ntbl = {}
   local function _11_(_241)
     return M.append(ntbl, _241)
