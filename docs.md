@@ -26,6 +26,11 @@ parameters: the first is type `a` and the second type `b`, and return type `c`.
 - `(a -> b)`: function type that accepts type `a` and return type `b`
 - `[a|b]`: type `a` or type `b`
 
+## Design
+
+fulib would assume the arguments are immutable. It should not change its arguments
+except they are obviously needs to be changed. For example, the function `append`.
+
 ## number
 
 #### inc
