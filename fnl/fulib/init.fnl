@@ -1,7 +1,25 @@
-;; @title(Fulib.nvim)
+;; @title(fulib.nvim)
 
-;; @abstract(A Functional library in Fennel for nvim)
+;; @abstract(A Functional library in Fennel for nvim.)
 ;; @generated_by
+
+;; @section(type hints)
+
+;; @para(This lib uses haskell-like type annotation.)
+;; @para(Its syntax is)
+;; @code(first_argument_type [-> second_argument_type [-> ...]] -> return type)
+;; @para(For example, a function with type `a -> b` means it accepts a type `a` parameter)
+;; @para(and have return a type `b` value. The type annotation `a -> b -> c` means it accepts two)
+;; @para(parameters: the first is type `a` and the second type `b`, and return type `c`.)
+
+;; @item(`bool`: bool)
+;; @item(`number`: number)
+;; @item(`string`: string)
+;; @item(`list` or `[v]`: the tables that is empty or contains not-nil value at the index 1)
+;; @item(`table` or `{k v}`: table)
+;; @item(`any`: any type)
+;; @item(`(a -> b)`: function type that accepts type `a` and return type `b`)
+;; @item(`[a|b]`: type `a` or type `b`)
 
 ;; @export
 (local M {})
@@ -12,26 +30,26 @@
 ;; @section(number)
 
 (fn M.inc [num]
-  "number | string -> number
+  "[number|string] -> number
 
   O(1). Increase `num`. `num` may be a number or string that can be converted to a number."
   (+ num 1))
 
 (fn M.dec [num]
-  "number | string -> number
+  "[number|string] -> number
 
   O(1). Decrease `num`. `num` may be a number or string that can be converted to a number."
   (- num 1))
 
 (fn M.odd? [num]
-  "number | string -> bool
+  "[number|string] -> bool
 
   O(1). Return true if `num` is odd, false otherwise. If `num` is a string, it must be
   convertible to a number."
   (= (% num 2) 1))
 
 (fn M.even? [num]
-  "number | string -> bool
+  "[number|string] -> bool
 
   O(1). Return true if `num` is even, false otherwise. If `num` is a string, it must be
   convertible to a number."
@@ -141,7 +159,7 @@
   (M.map M.id tbl))
 
 (fn M.empty? [v]
-  "table | string -> bool
+  "[table|string] -> bool
 
   O(1). Return true if `v` is an empty string or empty table, false otherwise."
   (match [(type v)]
@@ -150,7 +168,7 @@
     _ false))
 
 (fn M.not-empty? [v]
-  "table | string -> bool
+  "[table|string] -> bool
 
   O(1). Return false if `v` is an empty string or empty table, true otherwise."
   (not (M.empty? v)))
@@ -211,7 +229,7 @@
   true)
 
 (fn M.all [pred tbl]
-  "(v -> k -> bool) | (v -> bool) -> {k v}
+  "[(v -> k -> bool)|(v -> bool)] -> {k v}
 
   O(n * pred). Return true if predicate `pred` return true for all elements of `tbl`,
   false otherwise."
@@ -220,7 +238,7 @@
 ;; any
 
 (fn M.any [pred tbl]
-  "(v -> k -> bool) | (v -> bool) -> {k v}
+  "[(v -> k -> bool)|(v -> bool)] -> {k v}
 
   O(n * pred). Return true if predicate `pred` return true for at least elements of `tbl`,
   false otherwise."
@@ -237,14 +255,14 @@
     (f v i)))
 
 (fn M.for_each [f tbl]
-  "(v -> k -> any) | (v -> any) -> table | list -> table | list
+  "[(v -> k -> any)|(v -> any)] -> [table|list] -> [table|list]
 
   O(n * f). Apply function `f` for all elements of `tbl` without change `tbl` or create a new
   list."
   ((dispatch (M.list? tbl) for_each_in_lst for_each_in_tbl) f tbl))
 
 (fn M.map [f tbl]
-  "(v -> k -> any) | (v -> any) -> table -> table
+  "[(v -> k -> any)|(v -> any)] -> table -> table
 
   O(n * f). Like `for_each` but a new table would be created."
   (let [ntbl {}]
@@ -255,7 +273,7 @@
 ;; filter
 
 (fn M.filter [pred tbl]
-  "(v -> k -> bool) | (v -> bool) -> table -> table
+  "[(v -> k -> bool)|(v -> bool)] -> table -> table
 
   O(n * pred). Return a new list with the elements of `tbl` for which `pred` returns true."
   (M.map #(when (pred $1 $2)
@@ -264,7 +282,7 @@
 ;; fold
 
 (fn M.foldl [f init lst]
-  "(init -> v -> k -> init) | (init -> v -> init) -> init -> table -> init
+  "[(init -> v -> k -> init)|(init -> v -> init)] -> init -> table -> init
 
   O(n * f). Start with `init`, reduce `lst` with function `f`, from left to right."
   (var acc init)
@@ -272,7 +290,7 @@
   acc)
 
 (fn M.foldr [f init lst]
-  "(v -> init -> k -> init) | (v -> init -> init) -> init -> table -> init
+  "[(v -> init -> k -> init)|(v -> init -> init)] -> init -> table -> init
 
   O(n * f). Start with `init`, reduce `lst` with function `f`, from right to left."
   (var acc init)
