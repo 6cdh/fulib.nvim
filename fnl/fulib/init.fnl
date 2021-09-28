@@ -69,24 +69,24 @@
   O(1). Return false if `v` is nil, true otherwise."
   (not= v nil))
 
-(fn M.tbl? [v]
+(fn M.table? [v]
   "any -> bool
 
   O(1). Return true if `v` is a table, false otherwise."
   (= (type v) :table))
 
-(fn M.not-tbl? [v]
+(fn M.not-table? [v]
   "any -> bool
 
   O(1). Return false if `v` is a table, true otherwise."
-  (not (M.tbl? v)))
+  (not (M.table? v)))
 
 (fn M.list? [v]
   "any -> bool
 
   O(1). Return true if `v` is a list, false otherwise. A table `t` is a list if it is empty
   or `t[1] != nil`."
-  (and (M.tbl? v) (or (M.empty? v) (not (M.nil? (?. v 1))))))
+  (and (M.table? v) (or (M.empty? v) (not (M.nil? (?. v 1))))))
 
 (fn M.not-list? [v]
   "any -> bool
@@ -109,7 +109,8 @@
 (fn M.eq? [v1 v2]
   "any -> any -> bool
 
-  O(1) if `v1` and `v2` are not both table. Basically the same as `v1 == v2` in Lua except
+  O(1) if `v1` and `v2` are not both table, otherwise it compares `v1` and `v2`
+  recursively. Basically the same as `v1 == v2` in Lua except
   * for table, it will perform `eq?` for each key and corresponding value.
   * for number, it will perform float equality comparisons."
   (match [(type v1) (type v2)]
@@ -185,7 +186,7 @@
   O(n). Return false if `elem` is one of the values of `tbl`, true otherwise."
   (not (M.member? elem tbl)))
 
-(fn M.tbl-keys [tbl]
+(fn M.table-keys [tbl]
   "table -> list
 
   O(n). Return the list of keys of `tbl`."
@@ -193,7 +194,7 @@
     (M.for_each #(M.append ntbl $2) tbl)
     ntbl))
 
-(fn M.tbl-values [tbl]
+(fn M.table-values [tbl]
   "table -> list
 
   O(n). Return the list of values of `tbl`."
@@ -202,7 +203,7 @@
     ntbl))
 
 (fn M.append [tbl v]
-  "table -> any -> table
+  "list -> any -> list
 
   O(1). Append `v` into `tbl`."
   (tset tbl (+ (length tbl) 1) v)
