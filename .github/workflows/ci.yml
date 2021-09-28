@@ -67,10 +67,12 @@ jobs:
           mkdir -p lua/fulib
           fennel -c fnl/fulib/init.fnl > lua/fulib/init.lua
 
+      - uses: actions/setup-node@v2
+
       - name: Update docs
         run: |
-          sudo apt install -y pandoc
-          cat fnl/fulib/init.fnl | fennel scripts/doc.fnl | pandoc -t gfm > docs.md
+          npm install prettier
+          cat fnl/fulib/init.fnl | fennel scripts/doc.fnl | prettier --parser markdown > docs.md
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v4
