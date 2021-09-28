@@ -21,6 +21,11 @@
 ;; @item(`(a -> b)`: function type that accepts type `a` and return type `b`)
 ;; @item(`[a|b]`: type `a` or type `b`)
 
+;; @section(Design)
+
+;; @para(fulib would assume the arguments are immutable. It should not change its arguments)
+;; @para(except they are obviously needs to be changed. For example, the function `append`.)
+
 ;; @export
 (local M {})
 
