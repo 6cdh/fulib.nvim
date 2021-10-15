@@ -101,7 +101,7 @@
   (not (M.list? v)))
 
 (fn flt_eq? [flt1 flt2]
-  (-> (- flt1 flt2) (math.abs) (< 1e-06)))
+  (-> (- flt1 flt2) (math.abs) (< 1e-15)))
 
 (fn subset? [tbl1 tbl2]
   "Is tbl1 a subset of tbl2?"
