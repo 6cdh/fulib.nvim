@@ -217,6 +217,11 @@
 
 (testsuite :last {(fl.last []) nil (fl.last [1]) 1 (fl.last [3 5]) 5})
 
+(testsuite :range {(fl.range 1 1) [1]
+                   (fl.range 1 0) []
+                   (fl.range 1 2) [1 2]
+                   (fl.range 1 10 2) [1 3 5 7 9]})
+
 (testsuite :id {(fl.id 1) 1
                 (fl.id :1) :1
                 (fl.id []) []

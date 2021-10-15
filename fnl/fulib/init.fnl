@@ -32,6 +32,9 @@
 (macro dispatch [cond f1 f2]
   `(if ,cond ,f1 ,f2))
 
+(macro default [variable default-val]
+  `(local ,variable (or ,variable ,default-val)))
+
 ;; @section(number)
 
 (fn M.inc [num]
@@ -245,6 +248,16 @@
   (tset tbl (+ (length tbl) 1) v)
   tbl)
 
+(fn M.range [start end step]
+  "number -> number [-> number] -> list
+
+  O(n). Return a list from `start` to `end` (inclusive) with `step`."
+  (default step 1)
+  (let [nlst []]
+    (for [i start end step]
+      (M.append nlst i))
+    nlst))
+
 ;; @section(Common functional utils)
 
 (fn M.id [v]
@@ -373,18 +386,12 @@
 
 ;; zip
 
-(fn range [start end]
-  (let [nlst []]
-    (for [i start end]
-      (M.append nlst i))
-    nlst))
-
 (fn M.zip_with [f lst1 lst2]
   "(v1 -> v2 -> any) -> list -> list -> list
 
   O(min(m, n)). Return a list corresponding pair of `lst1` and `lst2`."
   (let [len (math.min (length lst1) (length lst2))]
-    (M.map #(f (. lst1 $1) (. lst2 $1)) (range 1 len))))
+    (M.map #(f (. lst1 $1) (. lst2 $1)) (M.range 1 len))))
 
 (fn M.zip [lst1 lst2]
   "table -> table -> list
