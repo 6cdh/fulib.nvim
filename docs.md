@@ -195,6 +195,15 @@ table -> table
 
 O(n). Return a copy of `tbl`.
 
+#### length
+
+```fennel
+(length tbl)
+table -> number
+```
+
+O(n). Return the length of `tbl`.
+
 #### empty?
 
 ```fennel
@@ -265,6 +274,24 @@ O(n). Return a new list based on `list`. Each element is paired with its index.
 [[1 'a'] [2 'b'] [3 'c']]
 ```
 
+#### first
+
+```fennel
+(first list)
+list -> any
+```
+
+O(1). Return the first element of `list`.
+
+#### last
+
+```fennel
+(last list)
+list -> any
+```
+
+O(1). Return the last element of `list`.
+
 #### append
 
 ```fennel
@@ -273,6 +300,15 @@ list -> any -> list
 ```
 
 O(1). Append `v` into `tbl`.
+
+#### range
+
+```fennel
+(range start end step)
+number -> number [-> number] -> list
+```
+
+O(n). Return a list from `start` to `end` (inclusive) with `step`.
 
 ## Common functional utils
 
@@ -332,6 +368,15 @@ O(n \* f). Like `for_each` but a new table would be created.
 ```
 
 O(n \* pred). Return a new list with the elements of `tbl` for which `pred` returns true.
+
+#### count
+
+```fennel
+(count pred tbl)
+[(v -> k -> bool)|(v -> bool)] -> table -> table
+```
+
+O(n \* pred). Return `(length (filter pred tbl))`
 
 #### foldl
 
