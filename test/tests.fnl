@@ -204,6 +204,10 @@
             (fl.table-values []) []
             (fl.table-values [4 5 6]) [4 5 6]})
 
+(testsuite :indexed {(fl.indexed [3 2 1]) [[1 3] [2 2] [3 1]]
+                     (fl.indexed [2]) [[1 2]]
+                     (fl.indexed []) []})
+
 (testsuite :id {(fl.id 1) 1
                 (fl.id :1) :1
                 (fl.id []) []

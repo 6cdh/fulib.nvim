@@ -207,6 +207,19 @@
     (M.for_each #(M.append ntbl $1) tbl)
     ntbl))
 
+(fn M.indexed [list]
+  "list -> list
+
+  O(n). Return a new list based on `list`. Each element is paired with its index.
+
+  **Example**
+
+  ```fennel
+  >> (indexed [:a :b :c])
+  [[1 'a'] [2 'b'] [3 'c']]
+  ```"
+  (M.map #[$2 $1] list))
+
 (fn M.append [tbl v]
   "list -> any -> list
 

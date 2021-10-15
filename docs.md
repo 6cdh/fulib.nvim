@@ -249,6 +249,22 @@ table -> list
 
 O(n). Return the list of values of `tbl`.
 
+#### indexed
+
+```fennel
+(indexed list)
+list -> list
+```
+
+O(n). Return a new list based on `list`. Each element is paired with its index.
+
+**Example**
+
+```fennel
+>> (indexed [:a :b :c])
+[[1 'a'] [2 'b'] [3 'c']]
+```
+
 #### append
 
 ```fennel
