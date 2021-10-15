@@ -19,6 +19,7 @@
 ;; @item(`table` or `{k v}`: table)
 ;; @item(`any`: any type)
 ;; @item(`(a -> b)`: function type that accepts type `a` and return type `b`)
+;; @item(`(a [-> b] -> c)`: function type that accepts type `a` and return type `b`. The second argument (type b) is optional.)
 ;; @item(`[a|b]`: type `a` or type `b`)
 
 ;; @section(Design)
@@ -279,7 +280,7 @@
   true)
 
 (fn M.all [pred tbl]
-  "[(v -> k -> bool)|(v -> bool)] -> {k v}
+  "(v [-> k] -> bool) -> {k v}
 
   O(n * pred). Return true if predicate `pred` return true for all elements of `tbl`,
   false otherwise."
@@ -288,7 +289,7 @@
 ;; any
 
 (fn M.any [pred tbl]
-  "[(v -> k -> bool)|(v -> bool)] -> {k v}
+  "(v [-> k] -> bool) -> {k v}
 
   O(n * pred). Return true if predicate `pred` return true for at least elements of `tbl`,
   false otherwise."
@@ -305,14 +306,14 @@
     (f v i)))
 
 (fn M.for_each [f tbl]
-  "[(v -> k -> any)|(v -> any)] -> [table|list] -> [table|list]
+  "(v [-> k] -> any) -> [table|list] -> [table|list]
 
   O(n * f). Apply function `f` for all elements of `tbl` without change `tbl` or create a new
   list."
   ((dispatch (M.list? tbl) for_each_in_lst for_each_in_tbl) f tbl))
 
 (fn M.map [f tbl]
-  "[(v -> k -> any)|(v -> any)] -> table -> table
+  "(v [-> k] -> any) -> table -> table
 
   O(n * f). Like `for_each` but a new table would be created."
   (let [ntbl {}]
@@ -323,14 +324,14 @@
 ;; filter
 
 (fn M.filter [pred tbl]
-  "[(v -> k -> bool)|(v -> bool)] -> table -> table
+  "(v [-> k] -> bool) -> table -> table
 
   O(n * pred). Return a new list with the elements of `tbl` for which `pred` returns true."
   (M.map #(when (pred $1 $2)
             $1) tbl))
 
 (fn M.count [pred tbl]
-  "[(v -> k -> bool)|(v -> bool)] -> table -> table
+  "(v [-> k] -> bool) -> table -> table
 
   O(n * pred). Return `(length (filter pred tbl))`"
   (M.length (M.filter pred tbl)))
@@ -338,7 +339,7 @@
 ;; fold
 
 (fn M.foldl [f init lst]
-  "[(init -> v -> k -> init)|(init -> v -> init)] -> init -> table -> init
+  "(init -> v [-> k] -> init) -> init -> table -> init
 
   O(n * f). Start with `init`, reduce `lst` with function `f`, from left to right."
   (var acc init)
@@ -346,7 +347,7 @@
   acc)
 
 (fn M.foldr [f init lst]
-  "[(v -> init -> k -> init)|(v -> init -> init)] -> init -> table -> init
+  "(v -> init [-> k] -> init) -> init -> table -> init
 
   O(n * f). Start with `init`, reduce `lst` with function `f`, from right to left."
   (var acc init)
