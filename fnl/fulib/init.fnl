@@ -164,6 +164,12 @@
   O(n). Return a copy of `tbl`."
   (M.map M.id tbl))
 
+(fn M.length [tbl]
+  "table -> number
+
+  O(n). Return the length of `tbl`."
+  (dispatch (M.list? tbl) (length tbl) (length (M.table-values tbl))))
+
 (fn M.empty? [v]
   "[table|string] -> bool
 
@@ -314,7 +320,7 @@
   "[(v -> k -> bool)|(v -> bool)] -> table -> table
 
   O(n * pred). Return `(length (filter pred tbl))`"
-  (length (M.filter pred tbl)))
+  (M.length (M.filter pred tbl)))
 
 ;; fold
 

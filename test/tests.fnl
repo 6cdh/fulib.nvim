@@ -158,6 +158,11 @@
 
 ;; List
 
+(testsuite :length {(fl.length [1 2 3]) 3
+                    (fl.length []) 0
+                    (fl.length {:k :v :k2 :v2}) 2
+                    (fl.length {1 :v 3 :v3}) 1})
+
 (testsuite :empty? {(fl.empty? nil) false
                     (fl.empty? false) false
                     (fl.empty? true) false
@@ -261,7 +266,8 @@
 (testsuite :count
            {(fl.count #(> $1 2) [1 2 3 4 5 6]) 4
             (fl.count #(< $2 2) [0 1 2 3]) 1
-            (fl.count #(= $1 :a) [:a :b :c :a :z :a]) 3})
+            (fl.count #(= $1 :a) [:a :b :c :a :z :a]) 3
+            (fl.count #(> $1 2) {:k 1 :k2 2 :k3 4 :k5 8}) 2})
 
 ;; fnlfmt: skip
 (testsuite :foldl
