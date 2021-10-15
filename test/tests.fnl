@@ -57,28 +57,28 @@
                       (fl.not-nil? 0) true})
 
 (testsuite :table? {(fl.table? nil) false
-                  (fl.table? false) false
-                  (fl.table? true) false
-                  (fl.table? []) true
-                  (fl.table? [1]) true
-                  (fl.table? {:k :v}) true
-                  (fl.table? "") false
-                  (fl.table? :1) false
-                  (fl.table? #1) false
-                  (fl.table? 1) false
-                  (fl.table? 0) false})
+                    (fl.table? false) false
+                    (fl.table? true) false
+                    (fl.table? []) true
+                    (fl.table? [1]) true
+                    (fl.table? {:k :v}) true
+                    (fl.table? "") false
+                    (fl.table? :1) false
+                    (fl.table? #1) false
+                    (fl.table? 1) false
+                    (fl.table? 0) false})
 
 (testsuite :not-table? {(fl.not-table? nil) true
-                      (fl.not-table? false) true
-                      (fl.not-table? true) true
-                      (fl.not-table? []) false
-                      (fl.not-table? [1]) false
-                      (fl.not-table? {:k :v}) false
-                      (fl.not-table? "") true
-                      (fl.not-table? :1) true
-                      (fl.not-table? #1) true
-                      (fl.not-table? 1) true
-                      (fl.not-table? 0) true})
+                        (fl.not-table? false) true
+                        (fl.not-table? true) true
+                        (fl.not-table? []) false
+                        (fl.not-table? [1]) false
+                        (fl.not-table? {:k :v}) false
+                        (fl.not-table? "") true
+                        (fl.not-table? :1) true
+                        (fl.not-table? #1) true
+                        (fl.not-table? 1) true
+                        (fl.not-table? 0) true})
 
 (testsuite :list? {(fl.list? nil) false
                    (fl.list? false) false
@@ -196,13 +196,13 @@
             (fl.not-member? false [:k 1 :k2 2]) true})
 
 (testsuite :table-keys {(fl.table-keys {:k 1 :k2 2}) (maybe [:k :k2] [:k2 :k])
-                      (fl.table-keys []) []
-                      (fl.table-keys [4 5 6]) [1 2 3]})
+                        (fl.table-keys []) []
+                        (fl.table-keys [4 5 6]) [1 2 3]})
 
-(testsuite :table-values {(fl.table-values {:k :v :k2 :v2}) (maybe [:v :v2]
-                                                               [:v2 :v])
-                        (fl.table-values []) []
-                        (fl.table-values [4 5 6]) [4 5 6]})
+(testsuite :table-values
+           {(fl.table-values {:k :v :k2 :v2}) (maybe [:v :v2] [:v2 :v])
+            (fl.table-values []) []
+            (fl.table-values [4 5 6]) [4 5 6]})
 
 (testsuite :id {(fl.id 1) 1
                 (fl.id :1) :1
