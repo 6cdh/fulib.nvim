@@ -208,6 +208,10 @@
                      (fl.indexed [2]) [[1 2]]
                      (fl.indexed []) []})
 
+(testsuite :first {(fl.first []) nil (fl.first [3 2]) 3 (fl.first [:z :b]) :z})
+
+(testsuite :last {(fl.last []) nil (fl.last [1]) 1 (fl.last [3 5]) 5})
+
 (testsuite :id {(fl.id 1) 1
                 (fl.id :1) :1
                 (fl.id []) []
@@ -253,6 +257,11 @@
             (fl.filter #(-> (% $2 2) (= 1)) [1 2 3 4 5]) [1 3 5]
             (fl.filter #(= (type $2) :string) {3 :x :k :v :k2 :v2}) {:k :v
                                                                      :k2 :v2}})
+
+(testsuite :count
+           {(fl.count #(> $1 2) [1 2 3 4 5 6]) 4
+            (fl.count #(< $2 2) [0 1 2 3]) 1
+            (fl.count #(= $1 :a) [:a :b :c :a :z :a]) 3})
 
 ;; fnlfmt: skip
 (testsuite :foldl

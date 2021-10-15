@@ -220,6 +220,18 @@
   ```"
   (M.map #[$2 $1] list))
 
+(fn M.first [list]
+  "list -> any
+
+  O(1). Return the first element of `list`."
+  (M.car list))
+
+(fn M.last [list]
+  "list -> any
+
+  O(1). Return the last element of `list`."
+  (. list (length list)))
+
 (fn M.append [tbl v]
   "list -> any -> list
 
@@ -297,6 +309,12 @@
   O(n * pred). Return a new list with the elements of `tbl` for which `pred` returns true."
   (M.map #(when (pred $1 $2)
             $1) tbl))
+
+(fn M.count [pred tbl]
+  "[(v -> k -> bool)|(v -> bool)] -> table -> table
+
+  O(n * pred). Return `(length (filter pred tbl))`"
+  (length (M.filter pred tbl)))
 
 ;; fold
 
