@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 env:
-  fennel-version: 0.10.0
+  fennel-version: 1.1.0
   lua-version: luajit-2.1.0-beta3
   binary-path: ${{ github.workspace }}/.bin
 
@@ -45,38 +45,3 @@ jobs:
           cd test
           fennel tests.fnl
 
-  lua-docs:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Restore fennel cache
-        uses: actions/cache@v2
-        with:
-          key: ${{ runner.os }}-dependencies-${{ env.fennel-version }}-${{ env.lua-version }}
-          path: ${{ env.binary-path }}
-
-      - name: Update PATH
-        run: |
-          echo "${{ env.binary-path }}" >> $GITHUB_PATH
-
-      - name: Update Lua source
-        run: |
-          mkdir -p lua
-          mkdir -p lua/fulib
-          fennel -c fnl/fulib/init.fnl > lua/fulib/init.lua
-
-      - uses: actions/setup-node@v2
-
-      - name: Update docs
-        run: |
-          npm install prettier -g
-          cat fnl/fulib/init.fnl | fennel scripts/doc.fnl | prettier --parser markdown > docs.md
-
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "[Bot] Update lua source and docs"
-          commit_author: Github Action <actions@github.com>
-          file_pattern: lua docs.md
