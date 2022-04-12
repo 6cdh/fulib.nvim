@@ -111,7 +111,7 @@ end
 M["table-keys"] = function(tbl)
   local ntbl = {}
   local function _11_(_241, _242)
-    return M.append(ntbl, _242)
+    return M["append!"](ntbl, _242)
   end
   M["for-each"](_11_, tbl)
   return ntbl
@@ -119,7 +119,7 @@ end
 M["table-values"] = function(tbl)
   local ntbl = {}
   local function _12_(_241)
-    return M.append(ntbl, _241)
+    return M["append!"](ntbl, _241)
   end
   M["for-each"](_12_, tbl)
   return ntbl
@@ -136,7 +136,7 @@ end
 M.last = function(list)
   return list[#list]
 end
-M.append = function(tbl, v)
+M["append!"] = function(tbl, v)
   tbl[(#tbl + 1)] = v
   return tbl
 end
@@ -144,7 +144,7 @@ M.range = function(start, _end, step)
   local step0 = (step or 1)
   local nlst = {}
   for i = start, _end, step0 do
-    M.append(nlst, i)
+    M["append!"](nlst, i)
   end
   return nlst
 end
@@ -207,7 +207,7 @@ M.map = function(f, tbl)
   local ntbl = {}
   if M["list?"](tbl) then
     local function _21_(_241, _242)
-      return M.append(ntbl, f(_241, _242))
+      return M["append!"](ntbl, f(_241, _242))
     end
     M["for-each"](_21_, tbl)
   else
