@@ -249,9 +249,9 @@
             (fl.any #(= (type $2) :string) {2 :v :k2 :v2}) true
             (fl.any #(= (type $2) :string) {2 :v2 3 :v}) false})
 
-(testsuite :append {(fl.append [] 1) [1]
-                    (fl.append [1] 2) [1 2]
-                    (fl.append [:x] 0) [:x 0]})
+(testsuite :append! {(fl.append! [] 1) [1]
+                     (fl.append! [1] 2) [1 2]
+                     (fl.append! [:x] 0) [:x 0]})
 
 (testsuite :for-each {(fl.for-each #$ [1 2 3]) nil})
 

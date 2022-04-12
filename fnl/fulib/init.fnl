@@ -207,7 +207,7 @@
 
   O(n). Return the list of keys of `tbl`."
   (let [ntbl []]
-    (M.for-each #(M.append ntbl $2) tbl)
+    (M.for-each #(M.append! ntbl $2) tbl)
     ntbl))
 
 (fn M.table-values [tbl]
@@ -215,7 +215,7 @@
 
   O(n). Return the list of values of `tbl`."
   (let [ntbl []]
-    (M.for-each #(M.append ntbl $1) tbl)
+    (M.for-each #(M.append! ntbl $1) tbl)
     ntbl))
 
 (fn M.indexed [list]
@@ -243,7 +243,7 @@
   O(1). Return the last element of `list`."
   (. list (length list)))
 
-(fn M.append [tbl v]
+(fn M.append! [tbl v]
   "list -> any -> list
 
   O(1). Append `v` into `tbl`."
@@ -257,7 +257,7 @@
   (default step 1)
   (let [nlst []]
     (for [i start end step]
-      (M.append nlst i))
+      (M.append! nlst i))
     nlst))
 
 ;; @section(Common functional utils)
@@ -318,7 +318,7 @@
 
   O(n * f). Like `for-each` but a new table would be created."
   (let [ntbl {}]
-    (if (M.list? tbl) (M.for-each #(M.append ntbl (f $1 $2)) tbl)
+    (if (M.list? tbl) (M.for-each #(M.append! ntbl (f $1 $2)) tbl)
         (M.for-each #(tset ntbl $2 (f $1 $2)) tbl))
     ntbl))
 
