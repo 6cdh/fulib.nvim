@@ -1,5 +1,7 @@
 # fulib.nvim
 
+[![CI](https://github.com/6cdh/fulib.nvim/actions/workflows/ci.yml/badge.svg)](https://github.com/6cdh/fulib.nvim/actions/workflows/ci.yml)
+
 A functional library written in Fennel, also a nvim plugin.
 
 ## Status
