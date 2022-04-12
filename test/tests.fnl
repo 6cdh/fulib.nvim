@@ -253,7 +253,7 @@
                     (fl.append [1] 2) [1 2]
                     (fl.append [:x] 0) [:x 0]})
 
-(testsuite :for_each {(fl.for_each #$ [1 2 3]) nil})
+(testsuite :for-each {(fl.for-each #$ [1 2 3]) nil})
 
 (testsuite :map
            {(fl.map #(* 2 $1) [2 4 6]) [4 8 12]
@@ -284,11 +284,11 @@
 
 ;; fnlfmt: skip
 (testsuite :foldr {
-           (fl.foldr #(+ $1 $2) 0 [1 2 3 4]) 10
-            (fl.foldr #(* $1 $2) 1 [1 2 3 4]) 24
-            (fl.foldr (fn [v acc]
-                          (table.insert acc v) acc) []
-                        [1 2 3]) [3 2 1]})
+                   (fl.foldr #(+ $1 $2) 0 [1 2 3 4]) 10
+                   (fl.foldr #(* $1 $2) 1 [1 2 3 4]) 24
+                   (fl.foldr (fn [v acc]
+                                 (table.insert acc v) acc) []
+                               [1 2 3]) [3 2 1]})
 
 (testsuite :reverse {(fl.reverse [1 2 3]) [3 2 1] (fl.reverse []) []})
 
@@ -307,9 +307,9 @@
                  (fl.zip [] [1 2 3]) []
                  (fl.zip [1 2] [1 2 3]) [[1 1] [2 2]]})
 
-(testsuite :zip_with
-           {(fl.zip_with #(* $1 $2) [1 2 3] [4 5 6]) [4 10 18]
-            (fl.zip_with #[(+ $1 $2)] [1 2 3] [4 5 6]) [[5] [7] [9]]})
+(testsuite :zip-with
+           {(fl.zip-with #(* $1 $2) [1 2 3] [4 5 6]) [4 10 18]
+            (fl.zip-with #[(+ $1 $2)] [1 2 3] [4 5 6]) [[5] [7] [9]]})
 
 (dotests M)
 

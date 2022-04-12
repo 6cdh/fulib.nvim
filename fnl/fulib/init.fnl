@@ -25,7 +25,8 @@
 ;; @section(Design)
 
 ;; @para(fulib would assume the arguments are immutable. It should not change its arguments)
-;; @para(except they are obviously needs to be changed. For example, the function `append`.)
+;; @para(except the function whose name ends up with "!", for example "append!", )
+;; @para(changes its arguments.)
 
 ;; @export
 (local M {})
@@ -206,7 +207,7 @@
 
   O(n). Return the list of keys of `tbl`."
   (let [ntbl []]
-    (M.for_each #(M.append ntbl $2) tbl)
+    (M.for-each #(M.append ntbl $2) tbl)
     ntbl))
 
 (fn M.table-values [tbl]
@@ -214,7 +215,7 @@
 
   O(n). Return the list of values of `tbl`."
   (let [ntbl []]
-    (M.for_each #(M.append ntbl $1) tbl)
+    (M.for-each #(M.append ntbl $1) tbl)
     ntbl))
 
 (fn M.indexed [list]
@@ -305,7 +306,7 @@
   (each [i v (pairs tbl)]
     (f v i)))
 
-(fn M.for_each [f tbl]
+(fn M.for-each [f tbl]
   "(v [-> k] -> any) -> [table|list] -> [table|list]
 
   O(n * f). Apply function `f` for all elements of `tbl` without change `tbl` or create a new
@@ -315,10 +316,10 @@
 (fn M.map [f tbl]
   "(v [-> k] -> any) -> table -> table
 
-  O(n * f). Like `for_each` but a new table would be created."
+  O(n * f). Like `for-each` but a new table would be created."
   (let [ntbl {}]
-    (if (M.list? tbl) (M.for_each #(M.append ntbl (f $1 $2)) tbl)
-        (M.for_each #(tset ntbl $2 (f $1 $2)) tbl))
+    (if (M.list? tbl) (M.for-each #(M.append ntbl (f $1 $2)) tbl)
+        (M.for-each #(tset ntbl $2 (f $1 $2)) tbl))
     ntbl))
 
 ;; filter
@@ -343,7 +344,7 @@
 
   O(n * f). Start with `init`, reduce `lst` with function `f`, from left to right."
   (var acc init)
-  (M.for_each #(set acc (f acc $1 $2)) lst)
+  (M.for-each #(set acc (f acc $1 $2)) lst)
   acc)
 
 (fn M.foldr [f init lst]
@@ -351,7 +352,7 @@
 
   O(n * f). Start with `init`, reduce `lst` with function `f`, from right to left."
   (var acc init)
-  (M.for_each #(set acc (f $1 acc $2)) (M.reverse lst))
+  (M.for-each #(set acc (f $1 acc $2)) (M.reverse lst))
   acc)
 
 ;; reverse
@@ -387,7 +388,7 @@
 
 ;; zip
 
-(fn M.zip_with [f lst1 lst2]
+(fn M.zip-with [f lst1 lst2]
   "(v1 -> v2 -> any) -> list -> list -> list
 
   O(min(m, n)). Return a list corresponding pair of `lst1` and `lst2`."
@@ -398,7 +399,7 @@
   "table -> table -> list
 
   O(min(m, n)). Return a list of corresponding pair of `lst1` and `lst2`."
-  (M.zip_with #[$1 $2] lst1 lst2))
+  (M.zip-with #[$1 $2] lst1 lst2))
 
 M
 
