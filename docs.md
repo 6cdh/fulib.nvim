@@ -30,7 +30,8 @@ parameters: the first is type `a` and the second type `b`, and return type `c`.
 ## Design
 
 fulib would assume the arguments are immutable. It should not change its arguments
-except they are obviously needs to be changed. For example, the function `append`.
+except the function whose name ends up with "!", for example "append!",
+changes its arguments.
 
 ## number
 
@@ -342,10 +343,10 @@ false otherwise.
 O(n \* pred). Return true if predicate `pred` return true for at least elements of `tbl`,
 false otherwise.
 
-#### for_each
+#### for-each
 
 ```fennel
-(for_each f tbl)
+(for-each f tbl)
 (v [-> k] -> any) -> [table|list] -> [table|list]
 ```
 
@@ -359,7 +360,7 @@ list.
 (v [-> k] -> any) -> table -> table
 ```
 
-O(n \* f). Like `for_each` but a new table would be created.
+O(n \* f). Like `for-each` but a new table would be created.
 
 #### filter
 
@@ -415,10 +416,10 @@ table -> table -> list
 
 O(n). Return the intersection of `tbl1` and `tbl2`.
 
-#### zip_with
+#### zip-with
 
 ```fennel
-(zip_with f lst1 lst2)
+(zip-with f lst1 lst2)
 (v1 -> v2 -> any) -> list -> list -> list
 ```
 

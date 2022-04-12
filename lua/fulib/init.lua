@@ -113,7 +113,7 @@ M["table-keys"] = function(tbl)
   local function _11_(_241, _242)
     return M.append(ntbl, _242)
   end
-  M.for_each(_11_, tbl)
+  M["for-each"](_11_, tbl)
   return ntbl
 end
 M["table-values"] = function(tbl)
@@ -121,7 +121,7 @@ M["table-values"] = function(tbl)
   local function _12_(_241)
     return M.append(ntbl, _241)
   end
-  M.for_each(_12_, tbl)
+  M["for-each"](_12_, tbl)
   return ntbl
 end
 M.indexed = function(list)
@@ -194,7 +194,7 @@ local function for_each_in_tbl(f, tbl)
   end
   return nil
 end
-M.for_each = function(f, tbl)
+M["for-each"] = function(f, tbl)
   local _19_
   if M["list?"](tbl) then
     _19_ = for_each_in_lst
@@ -209,13 +209,13 @@ M.map = function(f, tbl)
     local function _21_(_241, _242)
       return M.append(ntbl, f(_241, _242))
     end
-    M.for_each(_21_, tbl)
+    M["for-each"](_21_, tbl)
   else
     local function _22_(_241, _242)
       ntbl[_242] = f(_241, _242)
       return nil
     end
-    M.for_each(_22_, tbl)
+    M["for-each"](_22_, tbl)
   end
   return ntbl
 end
@@ -236,7 +236,7 @@ M.foldl = function(f, init, lst)
     acc = f(acc, _241, _242)
     return nil
   end
-  M.for_each(_26_, lst)
+  M["for-each"](_26_, lst)
   return acc
 end
 M.foldr = function(f, init, lst)
@@ -245,7 +245,7 @@ M.foldr = function(f, init, lst)
     acc = f(_241, acc, _242)
     return nil
   end
-  M.for_each(_27_, M.reverse(lst))
+  M["for-each"](_27_, M.reverse(lst))
   return acc
 end
 M.reverse = function(lst)
@@ -290,7 +290,7 @@ M.intersect = function(tbl1, tbl2)
     return intersect_tbl(tbl1, tbl2)
   end
 end
-M.zip_with = function(f, lst1, lst2)
+M["zip-with"] = function(f, lst1, lst2)
   local len = math.min(#lst1, #lst2)
   local function _35_(_241)
     return f((lst1)[_241], (lst2)[_241])
@@ -301,6 +301,6 @@ M.zip = function(lst1, lst2)
   local function _36_(_241, _242)
     return {_241, _242}
   end
-  return M.zip_with(_36_, lst1, lst2)
+  return M["zip-with"](_36_, lst1, lst2)
 end
 return M
