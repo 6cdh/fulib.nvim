@@ -28,6 +28,7 @@ M["list?"] = function(v)
     local t_1_ = v
     if (nil ~= t_1_) then
       t_1_ = (t_1_)[1]
+    else
     end
     return t_1_
   end
@@ -50,13 +51,15 @@ local function tbl_eq_3f(tbl1, tbl2)
 end
 M["eq?"] = function(v1, v2)
   local _5_ = {type(v1), type(v2)}
-  if ((type(_5_) == "table") and ((_5_)[1] == "number") and ((_5_)[2] == "number")) then
+  if ((_G.type(_5_) == "table") and ((_5_)[1] == "number") and ((_5_)[2] == "number")) then
     return flt_eq_3f(v1, v2)
-  elseif ((type(_5_) == "table") and ((_5_)[1] == "table") and ((_5_)[2] == "table")) then
+  elseif ((_G.type(_5_) == "table") and ((_5_)[1] == "table") and ((_5_)[2] == "table")) then
     return tbl_eq_3f(v1, v2)
-  else
+  elseif true then
     local _ = _5_
     return (v1 == v2)
+  else
+    return nil
   end
 end
 M["not-eq?"] = function(v1, v2)
@@ -87,13 +90,15 @@ M.length = function(tbl)
 end
 M["empty?"] = function(v)
   local _8_ = {type(v)}
-  if ((type(_8_) == "table") and ((_8_)[1] == "string")) then
+  if ((_G.type(_8_) == "table") and ((_8_)[1] == "string")) then
     return (v == "")
-  elseif ((type(_8_) == "table") and ((_8_)[1] == "table")) then
+  elseif ((_G.type(_8_) == "table") and ((_8_)[1] == "table")) then
     return M["nil?"](next(v))
-  else
+  elseif true then
     local _ = _8_
     return false
+  else
+    return nil
   end
 end
 M["not-empty?"] = function(v)
@@ -155,6 +160,7 @@ local function all_lst(pred, lst)
   for i = 1, #lst do
     if not pred(lst[i], i) then
       return false
+    else
     end
   end
   return true
@@ -163,6 +169,7 @@ local function all_tbl(pred, tbl)
   for k, v in pairs(tbl) do
     if not pred(v, k) then
       return false
+    else
     end
   end
   return true
@@ -223,6 +230,8 @@ M.filter = function(pred, tbl)
   local function _24_(_241, _242)
     if pred(_241, _242) then
       return _241
+    else
+      return nil
     end
   end
   return M.map(_24_, tbl)
