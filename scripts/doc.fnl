@@ -62,7 +62,7 @@
   (fn map-iterator [f it]
     (var forms [])
     (each [k v it]
-      (fl.append forms (f v k)))
+      (fl.append! forms (f v k)))
     forms)
 
   (let [parse (fennel.parser (fennel.stringStream s) nil {:comments true})
