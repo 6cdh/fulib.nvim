@@ -8,6 +8,8 @@ A functional library written in Fennel, also a nvim plugin.
 
 Beta. Breaking changes may occur.
 
+Don't use it. It contains some bad designs until I have time to rewrite them.
+
 ## Install
 
 Install with [packer.nvim](https://github.com/wbthomason/packer.nvim):
